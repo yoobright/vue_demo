@@ -2,7 +2,9 @@
 // import TheWelcome from '../components/TheWelcome.vue'
 import Vue from "vue";
 import { ref, onMounted } from 'vue'
+// @ts-ignore
 import WaveSurfer from 'wavesurfer.js'
+// @ts-ignore
 import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
 // import VueWaveSurfer from 'wavesurfer.js-vue'
 
