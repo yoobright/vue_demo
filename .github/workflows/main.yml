@@ -5,10 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     name: Build Vue...
     steps:
-    - uses: actions/checkout@v2
-    - id: Build-Vue
-      uses: xRealNeon/VuePagesAction@1.0.1
+    - uses: actions/checkout@v3
+    - name: Build Vue
+      run: |
+            npm run build
+            cp dist/index.html dist/404.html
+      shell: bash
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        username: 'yoobright'
-        reponame: 'vue_demo'
-        token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+      # Upload entire repository
+        path: './dist'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
