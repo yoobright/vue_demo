@@ -6,15 +6,19 @@ import { ref, onMounted } from 'vue'
 import WaveSurfer from 'wavesurfer.js'
 // @ts-ignore
 import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
+// @ts-ignore
+import SpectrogramPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js'
 import audioUrl from '@/assets/canon.mp3'
+import colormapHot from './colormap'
 
-// import VueWaveSurfer from 'wavesurfer.js-vue'
 let wavesurfer: any;
 const percentage = ref(0)
 const progressDiv = ref();
 const progressBar = ref();
+const zoomValue = ref(0);
 
 onMounted(() => {
+  
   wavesurfer = WaveSurfer.create({
     container: '#wave',
     waveColor: 'violet',
@@ -22,11 +26,17 @@ onMounted(() => {
     plugins: [
       Timeline.create({
         container: "#wave-timeline"
+      }),
+      SpectrogramPlugin.create({
+        wavesurfer: wavesurfer,
+        container: "#wave-spectrogram",
+        labels: true,
+        height: 256,
+        colorMap: colormapHot,
       })
     ]
   });
   wavesurfer.load(audioUrl);
-
 
   const showProgress = function (percent: number) {
     progressDiv.value.style.display = 'block';
@@ -69,10 +79,21 @@ const pauseAudio = () => {
         </div>
         <div id="wave"></div>
         <div id="wave-timeline"></div>
+        <div id="wave-spectrogram"></div>
       </div>
       <div style="height: 10px;"></div>
-      <ElButton @click="playAudio">播放</ElButton>
-      <ElButton @click="pauseAudio">暂停</ElButton>
+      <div class="footer-div">
+        <ElButton @click="playAudio">播放</ElButton>
+        <ElButton @click="pauseAudio">暂停</ElButton>
+        <el-icon style="margin-left: 12px" :size="20">
+          <ZoomOut />
+        </el-icon>
+        <el-slider style="width: 100px; margin-left: 12px; margin-right: 12px;" v-model="zoomValue" />
+        <el-icon :size="20">
+          <ZoomIn />
+        </el-icon>
+      </div>
+
     </el-card>
   </main>
 </template>
@@ -88,4 +109,12 @@ const pauseAudio = () => {
   top: 50%;
   left: 5px;
   right: 5px;
-}</style>
+}
+
+.footer-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+</style>
