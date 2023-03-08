@@ -1,11 +1,27 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // import HelloWorld from './components/HelloWorld.vue'
+const region = ref("zh")
+
+const { locale: i18nLang } = useI18n()
+
+const changeLang = (lang: string) => {
+  i18nLang.value = lang
+}
+
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="64" height="64" />
+    <el-form-item label="Lang">
+      <el-select v-model="region" @change="changeLang(region)" style="width: 98px;">
+        <el-option label="中文" value="zh"/>
+        <el-option label="English" value="en" />
+      </el-select>
+    </el-form-item>
 
     <!-- <div class="wrapper"> -->
       <!-- <HelloWorld msg="You did it!" />
@@ -81,5 +97,9 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
+}
+
+.el-form-item {
+  margin-bottom: unset;
 }
 </style>
