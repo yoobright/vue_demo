@@ -118,15 +118,15 @@ const changeVolume = () => {
         <div class="footer-div">
           <ElButton @click="playPauseAudio" style="width: 100px;">{{ t("play_puase") }}</ElButton>
           <el-icon style="margin-left: 12px" :size="20">
-            <ZoomOut />
+            <i-ep-zoom-out />
           </el-icon>
           <el-slider @input="changeZoom" :min="1" :max="100" style="width: 100px; margin-left: 12px; margin-right: 12px;"
             v-model="zoomValue" />
           <el-icon :size="20" style="margin-right: 12px;">
-            <ZoomIn />
+            <i-ep-zoom-in />
           </el-icon>
           <el-icon :size="20">
-            <Microphone />
+            <i-ep-microphone />
           </el-icon>
           <el-slider @input="changeVolume" :min="0" :max="100"
             style="width: 100px; margin-left: 12px; margin-right: 12px;" v-model="volumeValue" />

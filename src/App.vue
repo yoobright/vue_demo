@@ -29,7 +29,7 @@ const changeLang = (lang: string) => {
 
     <!-- <img alt="Vue logo" class="logo" src="logoIcon" width="64" height="64" /> -->
     <div class="vertical-header-right">
-      <el-form inline=true>
+      <el-form :inline=true >
         <el-form-item label="Lang">
           <el-select v-model="region" @change="changeLang(region)" style="width: 98px;">
             <el-option label="中文" value="zh" />
@@ -50,6 +50,9 @@ const changeLang = (lang: string) => {
 </template>
 
 <style scoped>
+.el-form {
+  
+}
 .el-form-item {
   margin-bottom: unset;
   margin-right: 10px;
