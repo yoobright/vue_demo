@@ -25,10 +25,11 @@ const changeLang = (lang: string) => {
 </script>
 
 <template>
-  <el-header>
+  <div class="navbar">
     
     <!-- <img alt="Vue logo" class="logo" src="logoIcon" width="64" height="64" /> -->
-    <el-form inline=true>
+    <div class="vertical-header-right">
+      <el-form inline=true>
       <el-form-item label="Lang">
         <el-select v-model="region" @change="changeLang(region)" style="width: 98px;">
           <el-option label="中文" value="zh" />
@@ -40,8 +41,9 @@ const changeLang = (lang: string) => {
         <el-switch @change="toggleDark()" v-model="isDark" inline-prompt :active-icon="darkIcon" :inactive-icon="dayIcon" />
       </el-form-item>
     </el-form>
+    </div>
 
-  </el-header>
+  </div>
 
   <RouterView />
 </template>
@@ -51,4 +53,20 @@ const changeLang = (lang: string) => {
   margin-bottom: unset;
   margin-right: 10px;
 }
+
+.navbar {
+    height: 48px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.navbar .vertical-header-right {
+    align-items: center;
+    color: #000000d9;
+    display: flex;
+    height: 48px;
+    justify-content: flex-end;
+    min-width: 280px;
+}
+
 </style>

@@ -11,7 +11,7 @@ import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
 // @ts-ignore
 import SpectrogramPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js'
 import audioUrl from '@/assets/canon.mp3'
-import {colormapJet} from './colormap'
+import { colormapJet } from './colormap'
 // @ts-ignore
 // import colormap from 'colormap'
 
@@ -100,8 +100,10 @@ const changeVolume = () => {
 
 <template>
   <el-main>
-    <h3>{{ t("test") }}</h3>
-    <div class="main-div">
+    <div class="footer-div">
+      <h3>{{ t("test") }}</h3>
+    </div>
+    <div class="main-div">  
       <el-card class="box-card">
         <div class="waveform" style="position: relative;">
           <div ref="progressDiv" class="progress-div">
@@ -114,7 +116,7 @@ const changeVolume = () => {
         </div>
         <div style="height: 10px;"></div>
         <div class="footer-div">
-          <ElButton @click="playPauseAudio">{{ t("play_puase") }}</ElButton>
+          <ElButton @click="playPauseAudio" style="width: 100px;">{{ t("play_puase") }}</ElButton>
           <el-icon style="margin-left: 12px" :size="20">
             <ZoomOut />
           </el-icon>
