@@ -99,7 +99,7 @@ const changeVolume = () => {
 </script>
 
 <template>
-  <main>
+  <el-main>
     <h3>{{ t("test") }}</h3>
     <div class="main-div">
       <el-card class="box-card">
@@ -131,7 +131,7 @@ const changeVolume = () => {
         </div>
       </el-card>
     </div>
-  </main>
+  </el-main>
 </template>
 
 <style>
