@@ -12,15 +12,14 @@ import en from './locales/en'
 import zh from './locales/zh'
 import { createI18n } from 'vue-i18n'
 
-
 const i18n = createI18n({
-    legacy: false,
-    locale: 'zh',
-    messages: {
-      en,
-      zh
-    }
-  })
+  legacy: false,
+  locale: 'zh',
+  messages: {
+    en,
+    zh
+  }
+})
 
 // import './assets/main.css'
 

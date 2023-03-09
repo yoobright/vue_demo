@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import TheWelcome from '../components/TheWelcome.vue'
-import Vue from "vue";
+import Vue from 'vue'
 import { ref, onMounted } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -17,15 +17,15 @@ import { colormapJet } from './colormap'
 
 const { t } = useI18n()
 
-let wavesurfer: any;
+let wavesurfer: any
 const percentage = ref(0)
-const zoomValue = ref(1);
-const minZoom = ref(1);
-const volumeValue = ref(100);
+const zoomValue = ref(1)
+const minZoom = ref(1)
+const volumeValue = ref(100)
 
-const progressDiv = ref();
-const progressBar = ref();
-const zoomSlider = ref();
+const progressDiv = ref()
+const progressBar = ref()
+const zoomSlider = ref()
 
 // const colors = colormap({
 //   colormap: 'jet',
@@ -35,7 +35,6 @@ const zoomSlider = ref();
 // console.log(colors);
 
 onMounted(() => {
-
   wavesurfer = WaveSurfer.create({
     container: '#wave',
     waveColor: 'violet',
@@ -44,56 +43,54 @@ onMounted(() => {
     // backend: 'MediaElement',
     plugins: [
       Timeline.create({
-        container: "#wave-timeline"
+        container: '#wave-timeline'
       }),
       SpectrogramPlugin.create({
         wavesurfer: wavesurfer,
-        container: "#wave-spectrogram",
+        container: '#wave-spectrogram',
         labels: true,
         height: 256,
-        colorMap: colormapJet,
+        colorMap: colormapJet
       })
     ]
-  });
-  wavesurfer.load(audioUrl);
+  })
+  wavesurfer.load(audioUrl)
   // console.log(wavesurfer.params.minPxPerSec);
-  zoomValue.value = wavesurfer.params.minPxPerSec;
+  zoomValue.value = wavesurfer.params.minPxPerSec
 
   const showProgress = function (percent: number) {
-    progressDiv.value.style.display = 'block';
-    percentage.value = percent;
+    progressDiv.value.style.display = 'block'
+    percentage.value = percent
     // debugger;
-  };
+  }
 
   const hideProgress = function () {
-    progressDiv.value.style.display = 'none';
-  };
+    progressDiv.value.style.display = 'none'
+  }
 
-  wavesurfer.on('loading', showProgress);
-  wavesurfer.on('ready', hideProgress);
-  wavesurfer.on('destroy', hideProgress);
-  wavesurfer.on('error', hideProgress);
-
+  wavesurfer.on('loading', showProgress)
+  wavesurfer.on('ready', hideProgress)
+  wavesurfer.on('destroy', hideProgress)
+  wavesurfer.on('error', hideProgress)
 })
 
 const playPauseAudio = () => {
   if (wavesurfer) {
-    wavesurfer.playPause();
+    wavesurfer.playPause()
   }
-
 }
 
 const changeZoom = () => {
   if (wavesurfer) {
     // wavesurfer.zoom(zoomValue.value);
     // wavesurfer.spectrogram.init();
-    console.log(zoomValue);
+    console.log(zoomValue)
   }
 }
 
 const changeVolume = () => {
   if (wavesurfer) {
-    wavesurfer.setVolume(volumeValue.value / 100);
+    wavesurfer.setVolume(volumeValue.value / 100)
   }
 }
 </script>
@@ -101,35 +98,50 @@ const changeVolume = () => {
 <template>
   <el-main>
     <div class="footer-div">
-      <h3>{{ t("test") }}</h3>
+      <h3>{{ t('test') }}</h3>
     </div>
-    <div class="main-div">  
+    <div class="main-div">
       <el-card class="box-card">
-        <div class="waveform" style="position: relative;">
+        <div class="waveform" style="position: relative">
           <div ref="progressDiv" class="progress-div">
-            <el-progress ref="progressBar" class="progress-bar" :text-inside="true" :stroke-width="20"
-              :percentage="percentage" />
+            <el-progress
+              ref="progressBar"
+              class="progress-bar"
+              :text-inside="true"
+              :stroke-width="20"
+              :percentage="percentage"
+            />
           </div>
           <div id="wave"></div>
           <div id="wave-timeline"></div>
           <div id="wave-spectrogram"></div>
         </div>
-        <div style="height: 10px;"></div>
+        <div style="height: 10px"></div>
         <div class="footer-div">
-          <ElButton @click="playPauseAudio" style="width: 100px;">{{ t("play_puase") }}</ElButton>
+          <ElButton @click="playPauseAudio" style="width: 100px">{{ t('play_puase') }}</ElButton>
           <el-icon style="margin-left: 12px" :size="20">
             <i-ep-zoom-out />
           </el-icon>
-          <el-slider @input="changeZoom" :min="1" :max="100" style="width: 100px; margin-left: 12px; margin-right: 12px;"
-            v-model="zoomValue" />
-          <el-icon :size="20" style="margin-right: 12px;">
+          <el-slider
+            @input="changeZoom"
+            :min="1"
+            :max="100"
+            style="width: 100px; margin-left: 12px; margin-right: 12px"
+            v-model="zoomValue"
+          />
+          <el-icon :size="20" style="margin-right: 12px">
             <i-ep-zoom-in />
           </el-icon>
           <el-icon :size="20">
             <i-ep-microphone />
           </el-icon>
-          <el-slider @input="changeVolume" :min="0" :max="100"
-            style="width: 100px; margin-left: 12px; margin-right: 12px;" v-model="volumeValue" />
+          <el-slider
+            @input="changeVolume"
+            :min="0"
+            :max="100"
+            style="width: 100px; margin-left: 12px; margin-right: 12px"
+            v-model="volumeValue"
+          />
         </div>
       </el-card>
     </div>

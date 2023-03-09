@@ -1,4 +1,4 @@
-@use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
 
 /* 暗黑模式适配 */
 html.dark {
@@ -113,8 +113,8 @@ html.dark {
   .pure-message {
     background-image: initial !important;
     background-color: rgb(36, 37, 37) !important;
-    box-shadow: rgb(13 13 13 / 12%) 0px 3px 6px -4px,
-      rgb(13 13 13 / 8%) 0px 6px 16px 0px, rgb(13 13 13 / 5%) 0px 9px 28px 8px !important;
+    box-shadow: rgb(13 13 13 / 12%) 0px 3px 6px -4px, rgb(13 13 13 / 8%) 0px 6px 16px 0px,
+      rgb(13 13 13 / 5%) 0px 9px 28px 8px !important;
 
     & .el-message__content {
       color: $color-white !important;
