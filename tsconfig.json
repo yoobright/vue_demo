@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "types": [
-       "vite-svg-loader", "vite/client"
-    ]
+       "vite-svg-loader", "vite/client","element-plus/global"
+    ],
   },
   "files": [],
   "references": [
