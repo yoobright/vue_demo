@@ -3,7 +3,7 @@
 import Vue from "vue";
 import { ref, onMounted } from 'vue'
 // @ts-ignore
-import {useI18n} from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 // @ts-ignore
 import WaveSurfer from 'wavesurfer.js'
 // @ts-ignore
@@ -11,9 +11,11 @@ import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
 // @ts-ignore
 import SpectrogramPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js'
 import audioUrl from '@/assets/canon.mp3'
-import colormapHot from './colormap'
+import {colormapJet} from './colormap'
+// @ts-ignore
+// import colormap from 'colormap'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 let wavesurfer: any;
 const percentage = ref(0)
@@ -24,6 +26,13 @@ const volumeValue = ref(100);
 const progressDiv = ref();
 const progressBar = ref();
 const zoomSlider = ref();
+
+// const colors = colormap({
+//   colormap: 'jet',
+//   nshades: 256,
+//   format: 'float'
+// });
+// console.log(colors);
 
 onMounted(() => {
 
@@ -42,7 +51,7 @@ onMounted(() => {
         container: "#wave-spectrogram",
         labels: true,
         height: 256,
-        colorMap: colormapHot,
+        colorMap: colormapJet,
       })
     ]
   });

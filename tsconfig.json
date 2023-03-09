@@ -1,4 +1,9 @@
 {
+  // "compilerOptions": {
+  //   "types": [
+  //      "vite-svg-loader"
+  //   ]
+  // },
   "files": [],
   "references": [
     {

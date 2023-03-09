@@ -2,10 +2,21 @@
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useDark, useToggle } from '@vueuse/core';
+
+import dayIcon from "@/assets/svg/day.svg"
+import darkIcon from "@/assets/svg/dark.svg"
 // import HelloWorld from './components/HelloWorld.vue'
 const region = ref("zh")
 
 const { locale: i18nLang } = useI18n()
+
+
+const isDark = useDark()
+
+const toggleDark = () => {
+  useToggle(isDark)
+}
 
 const changeLang = (lang: string) => {
   i18nLang.value = lang
@@ -15,21 +26,29 @@ const changeLang = (lang: string) => {
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="64" height="64" />
+    <!-- <img alt="Vue logo" class="logo" src="logoIcon" width="64" height="64" /> -->
     <el-form-item label="Lang">
       <el-select v-model="region" @change="changeLang(region)" style="width: 98px;">
-        <el-option label="中文" value="zh"/>
+        <el-option label="中文" value="zh" />
         <el-option label="English" value="en" />
       </el-select>
     </el-form-item>
 
-    <!-- <div class="wrapper"> -->
-      <!-- <HelloWorld msg="You did it!" />
+    <el-form-item>
+      <el-switch @change="toggleDark()" v-model="isDark" :active-icon="dayIcon"
+      :inactive-icon="darkIcon"/>
+    </el-form-item>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav> -->
+
+
+
+    <!-- <div class="wrapper"> -->
+    <!-- <HelloWorld msg="You did it!" />
+
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </nav> -->
     <!-- </div> -->
   </header>
 
@@ -102,4 +121,6 @@ nav a:first-of-type {
 .el-form-item {
   margin-bottom: unset;
 }
+
+
 </style>

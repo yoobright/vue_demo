@@ -6,6 +6,7 @@ import router from './router'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import './styles/dark/css-vars.scss'
 
 import en from './locales/en'
 import zh from './locales/zh'
