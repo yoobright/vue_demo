@@ -4,8 +4,8 @@ import Vue from 'vue'
 import { ref, onMounted } from 'vue'
 
 import { useI18n } from 'vue-i18n'
+// @ts-ignore
 import WaveSurfer from 'wavesurfer.js'
-
 // @ts-ignore
 import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
 // @ts-ignore
@@ -26,6 +26,8 @@ const volumeValue = ref(100)
 const progressDiv = ref()
 const progressBar = ref()
 const zoomSlider = ref()
+const inputValue = ref()
+const inputFile = ref()
 
 // const colors = colormap({
 //   colormap: 'jet',
@@ -93,12 +95,33 @@ const changeVolume = () => {
     wavesurfer.setVolume(volumeValue.value / 100)
   }
 }
+
+const readFile = () => {
+  console.log(inputFile.value)
+  const files = inputFile.value.input.files
+  if (files.length > 0) {
+    const file = files[0]
+    if (wavesurfer.isReady) {
+      wavesurfer.loadBlob(file)
+    }
+    
+  }
+}
 </script>
 
 <template>
   <el-main>
     <div class="footer-div">
       <h3>{{ t('test') }}</h3>
+    </div>
+    <div class="footer-div">
+      <el-input
+        style="width: 680px"
+        type="file"
+        ref="inputFile"
+        @change="readFile()"
+        v-model="inputValue"
+      />
     </div>
     <div class="main-div">
       <el-card class="box-card">
