@@ -7,7 +7,14 @@ import { useDark, useToggle } from '@vueuse/core'
 import dayIcon from '@/assets/svg/day.svg?component'
 import darkIcon from '@/assets/svg/dark.svg?component'
 // import HelloWorld from './components/HelloWorld.vue'
+
+// @ts-ignore
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+// @ts-ignore
+import en from 'element-plus/dist/locale/en.mjs'
+
 const region = ref('zh')
+const localeELement = ref(en)
 
 const { locale: i18nLang } = useI18n()
 
@@ -19,6 +26,12 @@ const toggleDark = () => {
 
 const changeLang = (lang: string) => {
   i18nLang.value = lang
+
+  if (lang === 'zh') {
+    localeELement.value = zhCn
+  } else if (lang === 'en') {
+    localeELement.value = en
+  }
 }
 </script>
 
@@ -35,24 +48,18 @@ const changeLang = (lang: string) => {
         </el-form-item>
 
         <el-form-item>
-          <el-switch
-            @change="toggleDark()"
-            v-model="isDark"
-            inline-prompt
-            :active-icon="darkIcon"
-            :inactive-icon="dayIcon"
-          />
+          <el-switch @change="toggleDark()" v-model="isDark" inline-prompt :active-icon="darkIcon"
+            :inactive-icon="dayIcon" />
         </el-form-item>
       </el-form>
     </div>
   </div>
-
-  <RouterView />
+  <el-config-provider :locale="localeELement">
+    <RouterView />
+  </el-config-provider>
 </template>
 
 <style scoped>
-.el-form {
-}
 .el-form-item {
   margin-bottom: unset;
   margin-right: 10px;

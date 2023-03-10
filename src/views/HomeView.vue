@@ -39,13 +39,16 @@ const inputFile = ref()
 onMounted(() => {
   wavesurfer = WaveSurfer.create({
     container: '#wave',
-    waveColor: 'violet',
-    progressColor: 'purple',
+    waveColor: '#95d475',
+    progressColor: '#529b2e',
     scrollParent: true,
     // backend: 'MediaElement',
     plugins: [
       Timeline.create({
-        container: '#wave-timeline'
+        container: '#wave-timeline',
+        primaryFontColor: '#337ecc',
+        secondaryFontColor: '#337ecc'
+
       }),
       SpectrogramPlugin.create({
         wavesurfer: wavesurfer,
@@ -97,7 +100,6 @@ const changeVolume = () => {
 }
 
 const readFile = () => {
-  console.log(inputFile.value)
   const files = inputFile.value.input.files
   if (files.length > 0) {
     const file = files[0]
