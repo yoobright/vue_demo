@@ -16,6 +16,7 @@ import { colormapJet } from './colormap'
 // import colormap from 'colormap'
 import Meyda from 'meyda/dist/node/main.js'
 // @ts-ignore
+import throttle from 'lodash.throttle'
 
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -93,13 +94,13 @@ function initOption() {
       data: yData
     },
     dataZoom: [
-        {
-            type: 'slider',
-            show: true,
-            xAxisIndex: [0],
-            startValue: 0,
-            endValue: 512
-        }
+      {
+        type: 'slider',
+        show: true,
+        xAxisIndex: [0],
+        startValue: 0,
+        endValue: 512
+      }
     ],
     visualMap: {
       min: -1,
@@ -107,7 +108,7 @@ function initOption() {
       calculable: false,
       show: false,
       // orient: 'horizontal',
-      bottom: 100, 
+      bottom: 100,
       right: 20,
       realtime: false,
       inRange: {
@@ -214,7 +215,7 @@ onMounted(() => {
 })
 
 function getInputBuffer(length: number = 256, sampleSize: number = 512) {
-  const bufferLength =  wavesurfer.backend.buffer.length;
+  const bufferLength = wavesurfer.backend.buffer.length;
   const neededLength = length * sampleSize;
   const numberOfChannels = wavesurfer.backend.buffer.numberOfChannels;
   if (bufferLength < neededLength) {
@@ -260,7 +261,7 @@ function getAllfeature(featureName: string, length: number = 256, sampleSize: nu
 }
 
 
-const testFunction = () => {
+const testFunction = throttle(() => {
   if (wavesurfer) {
     // console.log(wavesurfer.backend);
     const featureName = "amplitudeSpectrum";
@@ -272,7 +273,7 @@ const testFunction = () => {
     Meyda.sampleRate = wavesurfer.backend.ac.sampleRate;
     const res = getAllfeature(featureName, maxLen, sampleSize);
 
-    
+
 
     // console.log(res);
     // const xMax: number = res.length;
@@ -307,7 +308,11 @@ const testFunction = () => {
     option.value.series[0].name = featureName;
     // dialogVisible.value = true
   }
-}
+},
+  2000, {
+  leading: true,
+  trailing: false
+})
 
 const playPauseAudio = () => {
   if (wavesurfer) {
