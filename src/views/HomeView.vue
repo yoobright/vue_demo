@@ -160,7 +160,7 @@ onMounted(() => {
     waveColor: '#95d475',
     progressColor: '#529b2e',
     scrollParent: true,
-    backend: 'MediaElementWebAudio',
+    // backend: 'MediaElementWebAudio',
     plugins: [
       Timeline.create({
         container: '#wave-timeline',
@@ -189,6 +189,7 @@ onMounted(() => {
 
   const hideProgress = function () {
     progressDiv.value.style.display = 'none'
+    initOption();
   }
 
   const seekFunction = function (percent: number) {
@@ -198,7 +199,9 @@ onMounted(() => {
   const readyFunction = function () {
     console.log("ready")
     progressDiv.value.style.display = 'none'
-    initOption();
+    if (!option.value) {
+      initOption();
+    }
   }
 
 
@@ -292,7 +295,7 @@ const testFunction = throttle(() => {
         for (let k = 0; k < numberOfChannels; k++) {
           d += res[i + k * kMax][j];
         }
-        d = Math.max(-255, Math.log10(d) * 45);
+        d = Math.max(-80, Math.log10(d) * 20);
         if (d > max) {
           max = d;
         }
