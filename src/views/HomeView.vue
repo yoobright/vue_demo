@@ -4,6 +4,7 @@ import Vue from 'vue'
 import { ref, onMounted } from 'vue'
 
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
 // @ts-ignore
 import WaveSurfer from 'wavesurfer.js'
 // @ts-ignore
@@ -11,9 +12,10 @@ import Timeline from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.js'
 // @ts-ignore
 import SpectrogramPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.spectrogram.js'
 import audioUrl from '@/assets/canon.mp3'
-import { colormapJet } from './colormap'
+// import { colormapJet } from './colormap'
 // @ts-ignore
-// import colormap from 'colormap'
+import colormap from 'colormap'
+// @ts-ignore
 import Meyda from 'meyda/dist/node/main.js'
 // @ts-ignore
 import throttle from 'lodash.throttle'
@@ -43,7 +45,6 @@ use([
 ]);
 
 
-
 const { t } = useI18n()
 
 let wavesurfer: any
@@ -57,6 +58,7 @@ const progressBar = ref()
 const zoomSlider = ref()
 const inputValue = ref()
 const inputFile = ref()
+const featureName = ref<string>('')
 
 const dialogVisible = ref(false)
 
@@ -80,6 +82,19 @@ function generateData() {
   }
   return data;
 }
+
+const colors = colormap({
+  colormap: 'magma',
+  nshades: 256,
+  format: 'float'
+});
+
+const color16 = colormap({
+  colormap: 'magma',
+  nshades: 16,
+  format: 'hex'
+});
+
 const data = generateData();
 const option = ref();
 function initOption() {
@@ -112,19 +127,7 @@ function initOption() {
       right: 20,
       realtime: false,
       inRange: {
-        color: [
-          '#313695',
-          '#4575b4',
-          '#74add1',
-          '#abd9e9',
-          '#e0f3f8',
-          '#ffffbf',
-          '#fee090',
-          '#fdae61',
-          '#f46d43',
-          '#d73027',
-          '#a50026'
-        ]
+        color: color16
       }
     },
     series: [
@@ -147,19 +150,13 @@ function initOption() {
   }
 }
 
-// const colors = colormap({
-//   colormap: 'jet',
-//   nshades: 256,
-//   format: 'float'
-// });
-// console.log(colors);
 
 onMounted(() => {
   wavesurfer = WaveSurfer.create({
     container: '#wave',
     waveColor: '#95d475',
     progressColor: '#529b2e',
-    scrollParent: true,
+    // scrollParent: true,
     // backend: 'MediaElementWebAudio',
     plugins: [
       Timeline.create({
@@ -173,7 +170,7 @@ onMounted(() => {
         container: '#wave-spectrogram',
         labels: true,
         height: 256,
-        colorMap: colormapJet
+        colorMap: colors
       })
     ]
   })
@@ -263,20 +260,33 @@ function getAllfeature(featureName: string, length: number = 256, sampleSize: nu
   return res;
 }
 
+const postProcessFuncDict: { [key: string]: Function } = {
+  "melBands": (data: number) => data,
+  "mfcc": (data: number) => data,
+  "amplitudeSpectrum": (data: number) => Math.max(-80, Math.log10(data) * 20),
+  "powerSpectrum": (data: number) => Math.max(-80, Math.log10(data) * 10),
+}
 
 const testFunction = throttle(() => {
   if (wavesurfer) {
     // console.log(wavesurfer.backend);
-    const featureName = "amplitudeSpectrum";
+    if (!featureName.value) {
+      ElMessage({
+        message: t('tip'),
+        type: 'warning',
+      })
+      return;
+    }
+
     const numberOfChannels = wavesurfer.backend.buffer.numberOfChannels;
     const sampleSize = 512;
     const maxLen = 256;
 
     Meyda.bufferSize = sampleSize;
     Meyda.sampleRate = wavesurfer.backend.ac.sampleRate;
-    const res = getAllfeature(featureName, maxLen, sampleSize);
-
-
+    Meyda.melBands = 128;
+    Meyda.numberOfMFCCCoefficients = 20
+    const res = getAllfeature(featureName.value, maxLen, sampleSize);
 
     // console.log(res);
     // const xMax: number = res.length;
@@ -289,13 +299,15 @@ const testFunction = throttle(() => {
     const data = [];
     let max = -Infinity;
     let min = Infinity;
+
+    const postProcessFunc = postProcessFuncDict[featureName.value];
     for (let i = 0; i < xMax; i++) {
       for (let j = 0; j < yMax; j++) {
         let d = 0;
         for (let k = 0; k < numberOfChannels; k++) {
           d += res[i + k * kMax][j];
         }
-        d = Math.max(-80, Math.log10(d) * 20);
+        d = postProcessFunc(d);
         if (d > max) {
           max = d;
         }
@@ -354,11 +366,12 @@ const readFile = () => {
 <template>
   <el-main>
     <div class="footer-div">
-      <h3>{{ t('test') }}</h3>
+      <h3>{{ t('title') }}</h3>
     </div>
     <div class="footer-div">
       <el-input style="width: 680px" type="file" ref="inputFile" @change="readFile()" v-model="inputValue" />
     </div>
+
     <div class="main-div">
       <el-card class="box-card">
         <div class="waveform" style="position: relative">
@@ -390,6 +403,16 @@ const readFile = () => {
         </div>
       </el-card>
       <el-card class="box-card" style="height: 504px;">
+        <div class="main-div">
+          <el-form-item :label="t('feature')">
+            <el-select v-model="featureName" @change="testFunction" style="width: 180px">
+              <el-option label="amplitudeSpectrum" value="amplitudeSpectrum" />
+              <el-option label="powerSpectrum" value="powerSpectrum" />
+              <el-option label="melBands" value="melBands" />
+              <el-option label="mfcc" value="mfcc" />
+            </el-select>
+          </el-form-item>
+        </div>
         <div class="main-div">
           <v-chart class="heatmap" :option="option" autoresize />
         </div>
