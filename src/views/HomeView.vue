@@ -5,6 +5,15 @@ import { ref, onMounted } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
+
+import {
+  VideoPlay,
+  VideoPause,
+  DArrowLeft,
+  DArrowRight,
+// @ts-ignore
+} from '@element-plus/icons-vue'
+
 // @ts-ignore
 import WaveSurfer from 'wavesurfer.js'
 // @ts-ignore
@@ -59,6 +68,7 @@ const zoomSlider = ref()
 const inputValue = ref()
 const inputFile = ref()
 const featureName = ref<string>('')
+const playTag = ref(true)
 
 const dialogVisible = ref(false)
 
@@ -332,6 +342,7 @@ const testFunction = throttle(() => {
 const playPauseAudio = () => {
   if (wavesurfer) {
     wavesurfer.playPause()
+    playTag.value = wavesurfer.isPlaying() ? false : true
   }
 }
 
@@ -346,6 +357,18 @@ const changeZoom = () => {
 const changeVolume = () => {
   if (wavesurfer) {
     wavesurfer.setVolume(volumeValue.value / 100)
+  }
+}
+
+const skipForward = () => {
+  if (wavesurfer) {
+    wavesurfer.skipForward(5)
+  }
+}
+
+const skipBackward = () => {
+  if (wavesurfer) {
+    wavesurfer.skipBackward(5)
   }
 }
 
@@ -373,7 +396,7 @@ const readFile = () => {
     </div>
 
     <div class="main-div">
-      <el-card class="box-card">
+      <el-card class="box-card" style="height: 504px;">
         <div class="waveform" style="position: relative">
           <div ref="progressDiv" class="progress-div">
             <el-progress ref="progressBar" class="progress-bar" :text-inside="true" :stroke-width="20"
@@ -385,8 +408,12 @@ const readFile = () => {
         </div>
         <div style="height: 10px"></div>
         <div class="footer-div">
-          <ElButton @click="playPauseAudio" style="width: 100px">{{ t('play_puase') }}</ElButton>
-          <ElButton @click="testFunction" style="width: 100px">{{ t('test') }}</ElButton>
+          <el-button :icon="DArrowLeft" @click="skipBackward" circle></el-button>
+          <el-button :icon="playTag ? VideoPlay : VideoPause" 
+            @click="playPauseAudio" :title="t('play_puase')" circle>
+          </el-button>
+          <el-button :icon="DArrowRight" @click="skipForward" circle></el-button>
+          <el-button @click="testFunction" style="width: 100px">{{ t('test') }}</el-button>
           <el-icon style="margin-left: 12px" :size="20">
             <i-ep-zoom-out />
           </el-icon>

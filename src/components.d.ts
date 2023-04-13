@@ -31,6 +31,8 @@ declare module '@vue/runtime-core' {
     IconSupport: typeof import('./components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
     IEpMicrophone: typeof import('~icons/ep/microphone')['default']
+    IEpVideoPause: typeof import('~icons/ep/video-pause')['default']
+    IEpVideoPlay: typeof import('~icons/ep/video-play')['default']
     IEpZoomIn: typeof import('~icons/ep/zoom-in')['default']
     IEpZoomOut: typeof import('~icons/ep/zoom-out')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
